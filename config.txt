@@ -1,0 +1,14 @@
+[design]
+
+crispri_system = fn-dcas12a
+target_fasta = targets.fasta
+
+grna_number = 10
+orf_cutoff = 0.5
+
+min_gc_content = 30
+max_gc_content = 65
+
+genome = genome.fasta
+
+prefix = PTSC_Spacers
