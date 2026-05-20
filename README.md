@@ -127,6 +127,8 @@ RNAfold --version
   it could be a single gene or every gene in the genome and `genome`
   this is the full genome of your bug and is used to check for
   off-target sites.
+  
+  These scripts were influenced by Ban H., *et al*. Cross-Strain Transferability  of CRISPRi Systems and Design Rules from Laboratory to Clinical *Escherichia coli* Strains. ACS Synth Biol. 2026;15(5):1993-2010.
 
 ------------------------------------------------------------------------
 
