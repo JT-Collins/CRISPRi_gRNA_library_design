@@ -4,6 +4,7 @@ import argparse
 import csv
 import itertools
 import subprocess
+import sys
 
 # =========================
 # CONSTANTS
@@ -28,6 +29,23 @@ MAX_SPACERS = len(JUNCTIONS)
 def reverse_complement(seq):
     table = str.maketrans("ACGTacgt", "TGCAtgca")
     return seq.translate(table)[::-1]
+
+# check for BsmBI sites when making an array
+def validate_no_bsmbi_sites(spacers):
+    forbidden = ["gagacg", "cgtctc"]
+    failures = []
+
+    for name, seq in spacers:
+        seq_lower = seq.lower()
+        for site in forbidden:
+            if site in seq_lower:
+                failures.append((name, seq, site.upper()))
+
+    if failures:
+        msg = ["The following spacers are incompatible with multiplex design due to BsmBI sites:"]
+        for name, seq, site in failures:
+            msg.append(f"  - {name}: contains {site} in {seq}")
+        raise ValueError("\n".join(msg))
 
 # =========================
 # INPUT PARSER
@@ -315,6 +333,15 @@ def main():
     spacers = parse_input(args.input)
     results = []
 
+    try:
+        if args.mode == "multiplex":
+            validate_no_bsmbi_sites(spacers)
+
+    except ValueError as e:
+        print("\n[ERROR] Invalid spacer(s) detected:", file=sys.stderr)
+        print(e, file=sys.stderr)
+        print("\nFix the sequences and rerun.", file=sys.stderr)
+        sys.exit(1)
     
 # SINGLE MODE
     if args.mode == "single":
